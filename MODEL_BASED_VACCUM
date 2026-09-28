@@ -1,0 +1,60 @@
+class VacuumAgent:
+
+    def __init__(self):
+        # Internal model
+        self.model = {
+            "A": "Unknown",
+            "B": "Unknown"
+        }
+
+        self.location = "A"
+
+    def run(self, environment):
+
+        while True:
+
+            # Perceive current location
+            status = environment[self.location]
+
+            # Update model
+            self.model[self.location] = status
+
+            print("\nCurrent Location:", self.location)
+            print("Status:", status)
+
+            # If dirty, clean it
+            if status == "Dirty":
+                print("Action: Suck")
+                environment[self.location] = "Clean"
+
+            # If clean, move to other room
+            else:
+                if self.location == "A":
+                    print("Action: Move to B")
+                    self.location = "B"
+                else:
+                    print("Action: Move to A")
+                    self.location = "A"
+
+            # Stop when both rooms are clean
+            if (self.model["A"] == "Clean" and
+                    self.model["B"] == "Clean"):
+
+                print("\nBoth rooms are clean!")
+                print("Agent stops.")
+                break
+
+
+# Take input from user
+A = input("Enter status of Room A (Dirty/Clean): ").capitalize()
+B = input("Enter status of Room B (Dirty/Clean): ").capitalize()
+
+# Create environment
+environment = {
+    "A": A,
+    "B": B
+}
+
+# Create and run agent
+agent = VacuumAgent()
+agent.run(environment)
